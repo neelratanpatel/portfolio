@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Neel - Developer Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            color: white;
+            background-color: #2e2d2a;
+            font-family: 'Poppins', sans-serif;
+        }
+        #loader-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            background-color: #2e2d2a;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+        .loader--hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .loader {
+            width: 300px;
+            height: 300px;
+        }
+        .navbar {
+            position: fixed;
+            width: 100%;
+            z-index: 999;
+            top: 0;
+            background-color: #1a1919;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .portfolio-heading {
+            font-size: 2rem;
+            display: flex;
+            cursor: pointer;
+        }
+        .port-blue {
+            color: #007bff;
+        }
+        .hover-grow {
+            display: inline-block;
+            transition: transform 0.3s ease-in-out;
+        }
+        .hover-grow:hover {
+            transform: scale(1.3);
+        }
+        .left {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .right {
+            display: flex;
+            align-items: center;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #fefefe;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: #757575;
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 20px;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+        .bar {
+            height: 3px;
+            width: 100%;
+            background-color: #fefefe;
+            transition: all 0.3s ease-in-out;
+        }
+        @media screen and (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                right: 0;
+                background-color: #1a1919;
+                opacity: 0.95;
+                width: 100%;
+                text-align: center;
+                box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+                z-index: 10;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-links li {
+                margin: 1rem 0;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .hamburger.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+            .hamburger.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+            .hamburger.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+        }
+        .firstSection {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8rem 5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .leftSection {
+            flex: 1;
+            padding-right: 2rem;
+            font-size: 1.6rem;
+        }
+        .leftSection h1 {
+            font-size: 3.2rem;
+            margin-bottom: 0.5rem;
+            color: #d4d4d4;
+        }
+        .leftSection div {
+            font-size: 2rem;
+            margin-bottom: 0.3rem;
+            color: #e8e5e5;
+        }
+        .purple {
+            font-size: 2.5rem;
+            color: rgb(235, 145, 235);
+            font-weight: bold;
+        }
+        #element {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .buttons {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Important: Set fixed dimensions */
+            width: 200px; 
+            height: 50px; 
+        }
+        .btn a {
+            text-decoration: none;
+            color: white;
+        }
+        .btn-primary {
+            background-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-secondary {
+            background-color: #28a745;
+        }
+        .btn-secondary:hover {
+            background-color: #1e7e34;
+        }
+        .download-lottie {
+            width: 100%;
+            height: 140%;
+            position: absolute;
+            top: 5;
+            left: 0;
+            display: none; /* Hide by default */
+        }
+        .rightSection {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+        .rightSection img {
+            max-width: 35rem;
+        }
+        @media (max-width: 1160px) {
+            .rightSection img {
+                max-width: 25rem;
+            }
+            .firstSection {
+                padding: 14rem 5rem;
+            }
+            .purple {
+                font-size: 1.8rem;
+            }
+            .leftSection {
+                font-size: 1.2rem;
+            }
+            .leftSection div {
+                font-size: 1.5rem;
+            }
+            #element {
+                font-size: 2rem;
+            }
+        }
+        @media (max-width: 768px) {
+            .firstSection {
+                flex-direction: column-reverse;
+                text-align: center;
+                padding: 14rem 5rem;
+            }
+            .leftSection {
+                padding-right: 0;
+                margin-top: 2rem;
+                font-size: 1rem;
+            }
+            .leftSection h1 {
+                font-size: 1.5rem;
+            }
+            .leftSection div {
+                font-size: 1.5rem;
+            }
+            #element {
+                font-size: 2rem;
+            }
+            .buttons {
+                justify-content: center;
+            }
+            .btn {
+                margin: 0.5rem 0;
+                width: 100%;
+            }
+            .rightSection {
+                padding-top: 3rem;
+                margin-bottom: 2rem;
+            }
+            .rightSection img {
+                display: none;
+            }
+        }
+        main hr {
+            border: 0;
+            background-color: rgb(255, 255, 255);
+            height: 1px;
+            margin: 40px 84px;
+        }
+        .secondSection, .thirdSection, .fourthSection, .fifthSection {
+            padding: 2rem;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        /* New CSS for the scroll animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .text-gray {
+            color: rgb(200, 200, 200);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        h1 {
+            margin-bottom: 2rem;
+        }
+        .parent-box {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+        }
+        .box {
+            background-color: #3b3939;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 300px;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease-in-out;
+        }
+        .box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .vertical {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .image-top {
+            width: 80px;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+        .thirdSection .image-top {
+            width: 60px;
+        }
+        .fourthSection .image-top {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+        }
+        .vertical-text {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #e1e1e1;
+        }
+        .vertical-desc {
+            color: #dadada;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            .box {
+                width: 100%;
+            }
+        }
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .secondSection .box {
+                width: calc(50% - 1rem);
+            }
+        }
+        @media (min-width: 601px) and (max-width: 900px) {
+            .thirdSection .box, .fourthSection .box {
+                width: calc(50% - 1rem);
+            }
+        }
+        @media (max-width: 600px) {
+            .thirdSection .box, .fourthSection .box {
+                width: 100%;
+            }
+        }
+        #contact {
+            background-color: #1b1b1b;
+            color: #939393;
+            padding: 20px;
+            font-size: 0.9rem;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eaeaea;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .footer-first {
+            font-weight: bold;
+            font-size: 1.6rem;
+        }
+        .footer-second ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        .footer-second ul li {
+            display: flex;
+            align-items: center;
+        }
+        .footer-second ul a {
+            color: #c0c0c0;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .footer-second ul img {
+            vertical-align: middle;
+        }
+        .footer-rights {
+            text-align: center;
+            padding-top: 10px;
+            font-size: 0.8rem;
+            color: #c8c8c8;
+        }
+        @media (max-width: 960px) {
+            .footer {
+                flex-direction: column;
+            }
+            .footer-second {
+                margin-top: 10px;
+            }
+            .footer-second ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loader-wrapper">
+        <dotlottie-wc class="loader"
+            src="https://lottie.host/71d9d5b8-7162-4ddc-a33b-59f97e0fe8f2/E2N1hWBBul.lottie"
+            speed="1"
+            autoplay
+            loop
+            ></dotlottie-wc>
+    </div>
+    
+    <header class="navbar">
+        <nav>
+            <div class="portfolio-heading" style="cursor: pointer;">
+                <span class="port-blue hover-grow">P</span>
+                <span class="port-blue hover-grow">o</span>
+                <span class="port-blue hover-grow">r</span>
+                <span class="port-blue hover-grow">t</span>
+                <span class="hover-grow">f</span>
+                <span class="hover-grow">o</span>
+                <span class="hover-grow">l</span>
+                <span class="hover-grow">i</span>
+                <span class="hover-grow">o</span>
+            </div>
+            <div class="right">
+                <button class="hamburger">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#contact">Contact Me</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="firstSection">
+            <div class="leftSection">
+                Hi, My name is <span class="purple">Neel Ratan Patel</span>
+                <div>and I am a passionate</div>
+                <span id="element"></span>
+                <div class="buttons">
+                    <button class="btn btn-primary" id="download-btn">
+                        <span id="download-text">Download Resume</span>
+                        <dotlottie-wc class="download-lottie"
+                            src="https://lottie.host/5bbecacd-6942-414a-bd38-9c8ed0bfdf5f/GbqYvtdl9V.lottie"
+                            speed="1"
+                            autoplay
+                            loop
+                        ></dotlottie-wc>
+                    </button>
+                    <button class="btn btn-secondary"><a href="https://github.com/neelratanpatel" target="_blank">Visit Github</a></button>
+                </div>
+            </div>
+            <div class="rightSection">
+                <img src="COM/bg.png" alt="A person coding">
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="about" class="secondSection reveal">
+            <span class="text-gray">What I have done so far</span>
+            <h1>Education Qualification</h1>
+            <div class="parent-box">
+                <div class="box">
+                    <div class="vertical">
+                        <img src="COM/10th.png" alt="" class="image-top">
+                        <div class="vertical-text">10<sup>th</sup> (2018 - 2019)</div>
+                        <div class="vertical-desc">
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Expedita maxime nihil ex. Deserunt temporibus non consequuntur reiciendis recusandae, dicta molestiae? Similique delectus cum dicta, unde culpa sapiente repudiandae eveniet quos?
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="vertical">
+                        <img src="COM/12th.png" alt="" class="image-top">
+                        <div class="vertical-text">12<sup>th</sup> (2020 - 2021)</div>
+                        <div class="vertical-desc">
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Expedita maxime nihil ex. Deserunt temporibus non consequuntur reiciendis recusandae, dicta molestiae? Similique delectus cum dicta, unde culpa sapiente repudiandae eveniet quos?
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="vertical">
+                        <img src="COM/BCA.png" alt="" class="image-top">
+                        <div class="vertical-text">BCA(2021-2024)</div>
+                        <div class="vertical-desc">
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Expedita maxime nihil ex. Deserunt temporibus non consequuntur reiciendis recusandae, dicta molestiae? Similique delectus cum dicta, unde culpa sapiente repudiandae eveniet quos?
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="vertical">
+                        <img src="COM/MCA.png" alt="" class="image-top">
+                        <div class="vertical-text">MCA(2024 -2026)</div>
+                        <div class="vertical-desc">
+                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Expedita maxime nihil ex. Deserunt temporibus non consequuntur reiciendis recusandae, dicta molestiae? Similique delectus cum dicta, unde culpa sapiente repudiandae eveniet quos?
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="technologies" class="thirdSection reveal">
+            <span class="text-gray">Skills I possess</span>
+            <h1>Technologies</h1>
+            <div class="parent-box">
+                <div class="box">
+                    <div class="vertical">
+                        <img src="COM/html.png" alt="HTML" class="image-top">
+                        <div class="vertical-text">HTML</div>
+                        <div class="vertical-desc">
+                            Proficient in creating the structural foundation of web pages, ensuring semantic and accessible markup.
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="vertical">
+                        <img src="COM/css.png" alt="CSS" class="image-top">
+                        <div class="vertical-text">CSS</div>
+                        <div class="vertical-desc">
+                            Skilled in styling web pages, creating visually appealing and responsive layouts.
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="vertical">
+                        <img src="COM/js.png" alt="JavaScript" class="image-top">
+                        <div class="vertical-text">JavaScript</div>
+                        <div class="vertical-desc">
+                            Experienced in adding interactivity and dynamic behavior to websites.
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="vertical">
+                        <img src="COM/java.png" alt="Java" class="image-top">
+                        <div class="vertical-text">Java</div>
+                        <div class="vertical-desc">
+                            Competent in object-oriented programming with Java for building robust applications.
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="vertical">
+                        <img src="COM/c++.png" alt="C++" class="image-top">
+                        <div class="vertical-text">C/C++</div>
+                        <div class="vertical-desc">
+                            Knowledgeable in C/C++ for system-level programming and performance-critical applications.
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="vertical">
+                        <img src="COM/sql.png" alt="SQL" class="image-top">
+                        <div class="vertical-text">SQL</div>
+                        <div class="vertical-desc">
+                            Proficient in database management and querying using SQL.
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="vertical">
+                        <img src="COM/JDBC.png" alt="JDBC" class="image-top">
+                        <div class="vertical-text">JDBC</div>
+                        <div class="vertical-desc">
+                            Experienced in using JDBC for Java database connectivity.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="certificates" class="fourthSection reveal">
+            <span class="text-gray">My achievements</span>
+            <h1>Certificates</h1>
+            <div class="parent-box">
+                <div class="box">
+                    <div class="vertical">
+                        <img src="COM/DCA.png" alt="DCA Certificate" class="image-top">
+                        <div class="vertical-text">DCA</div>
+                        <div class="vertical-desc">
+                            Diploma in Computer Applications, showcasing foundational computer skills.
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="vertical">
+                        <img src="COM/CCC.png" alt="CCC Certificate" class="image-top">
+                        <div class="vertical-text">CCC</div>
+                        <div class="vertical-desc">
+                            Course on Computer Concepts, indicating basic computer literacy.
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="vertical">
+                        <img src="COM/ETHICAL.png" alt="Ethical Hacking Certificate" class="image-top">
+                        <div class="vertical-text">Ethical Hacking</div>
+                        <div class="vertical-desc">
+                            Certificate in Ethical Hacking, demonstrating knowledge in cybersecurity principles and practices.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <hr>
+
+        <section id="projects" class="fifthSection reveal">
+            <h1 style="text-align: center;">My Projects</h1>
+            <div class="parent-box">
+                <div class="box">
+                    <div class="vertical">
+                        <div class="vertical-text">Event management system</div>
+                        <div class="vertical-desc">
+                            This project showcases a responsive web application for managing and organizing events.
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="vertical">
+                        <div class="vertical-text">Guess the number</div>
+                        <div class="vertical-desc">
+                            A simple interactive game built with JavaScript to demonstrate fundamental programming logic.
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="vertical">
+                        <div class="vertical-text">Login page</div>
+                        <div class="vertical-desc">
+                            A secure and user-friendly login page implementation, demonstrating front-end design and form handling.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <div class="footer">
+            <div class="footer-first">
+                <div class="name">Neel's Developer Portfolio</div>
+            </div>
+            <div class="footer-second">
+                <ul>
+                    <li>
+                        <a href="https://wa.me/6393788862" target="_blank">
+                            <img src="COM/whatsapp.png" style="width: 2rem;" alt="WhatsApp">
+                            WhatsApp Me
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.instagram.com/neelratan.patel?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">
+                            <img src="COM/instagram.png" style="width: 2rem;" alt="Instagram">
+                            Instagram Me
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://t.me/neelratanpatel" target="_blank">
+                            <img src="COM/telegram.png" style="width: 2rem;" alt="Telegram">
+                            Telegram Me
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.linkedin.com/in/neel-ratan-patel-37bb20341/" target="_blank">
+                            <img src="COM/linkdin.png" style="width: 2rem;" alt="LinkedIn">
+                            LinkedIn Me
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mailto:neelratanpatel@gmail.com">
+                            <img src="COM/mail.png" style="width: 1.5rem;" alt="Email">
+                            Mail Me
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tel:+916393788862">
+                            <img src="COM/phone.png" style="width: 1.6rem;" alt="Phone">
+                            +916393788862
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-rights">www.neelportfolio.com | all rights reserved</div>
+    </footer>
+    
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
+    
+    <script>
+        var typed = new Typed('#element', {
+            strings: ['Web Developer', 'Backend Developer', 'Software Developer'],
+            typeSpeed: 50,
+            loop: true,
+        });
+    </script>
+    
+    <script>
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        const allNavLinks = document.querySelectorAll('.nav-links li a');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+
+        allNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+            });
+        });
+    </script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loaderWrapper = document.getElementById('loader-wrapper');
+            setTimeout(() => {
+                loaderWrapper.classList.add('loader--hidden');
+            }, 3000); 
+        });
+    </script>
+
+    <script>
+        document.getElementById('download-btn').addEventListener('click', () => {
+            const downloadText = document.getElementById('download-text');
+            const downloadLottie = document.querySelector('.download-lottie');
+
+            // Hide the text and show the lottie animation
+            downloadText.style.display = 'none';
+            downloadLottie.style.display = 'block';
+
+            setTimeout(() => {
+                // Hide the lottie animation and show the text
+                downloadText.style.display = 'block';
+                downloadLottie.style.display = 'none';
+
+                // Create a temporary link to trigger the download
+                const link = document.createElement('a');
+                link.href = "com/neel resume.pdf";
+                link.download = "neel resume.pdf";
+                link.click();
+            }, 3000); 
+        });
+    </script>
+
+    <script>
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, {
+            threshold: 0.1 
+        });
+
+        revealElements.forEach(element => {
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>
